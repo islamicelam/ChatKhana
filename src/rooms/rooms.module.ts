@@ -10,6 +10,7 @@ import {RoomsEntity} from "./rooms.entity";
     providers: [RoomsService],
     imports: [
         TypeOrmModule.forFeature([UsersEntity, RoomsEntity])
-    ]
+    ],
+    exports: [RoomsService]
 })
 export class RoomsModule {}

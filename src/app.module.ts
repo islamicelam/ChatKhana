@@ -8,6 +8,10 @@ import { RoomsController } from './rooms/rooms.controller';
 import { RoomsModule } from './rooms/rooms.module';
 import config from "../ormconfig";
 import {RoomsEntity} from "./rooms/rooms.entity";
+import {UsersController} from "./users/users.controller";
+import {UsersService} from "./users/users.service";
+import {AuthController} from "./auth/auth.controller";
+import {AuthService} from "./auth/auth.service";
 
 @Module({
   imports: [
@@ -19,7 +23,7 @@ import {RoomsEntity} from "./rooms/rooms.entity";
       ]),
       RoomsModule
   ],
-  controllers: [RoomsController],
-  providers: [RoomsService],
+  controllers: [], //wtf
+  providers: [], //wtf
 })
 export class AppModule {}

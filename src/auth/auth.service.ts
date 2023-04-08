@@ -15,13 +15,16 @@ export class AuthService {
     ) {}
     async validateUser (userDto: LoginDto) {
         const user = await this.usersService.findByUsername(userDto.username);
-        if (user && user.password === userDto.password) {
-            return user
+        const hashPassword = await bcrypt.hash(userDto.password, 5);
+        const passwordEquals = await bcrypt.compare(userDto.password, hashPassword);
+        if (user && passwordEquals) {
+            return user;
         }
         throw new UnauthorizedException({message: "Wrong username or password"})
     }
 
     async login (userDto: LoginDto) {
+        console.log(userDto)
         const user = await this.validateUser(userDto);
         return this.generateToken(user)
     }
@@ -38,7 +41,7 @@ export class AuthService {
     }
 
     private async generateToken (user: UsersEntity) {
-        const payload = {email: user.email, id: user.id}
+        const payload = {email: user.email, id: user.userId}
         return {
             token: this.jwtService.sign(payload)
         }
