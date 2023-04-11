@@ -8,6 +8,7 @@ export class RoomsController {
     }
 
     @Post()
+    //@UseGuards(JwtAuthGuard)
     createRoom (@Body() createRoomDto: CreateRoomDto) {
         return this.roomsService.createRoom(createRoomDto);
     }

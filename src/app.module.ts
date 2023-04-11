@@ -3,15 +3,11 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {UsersEntity} from "./users/users.entity";
-import { RoomsService } from './rooms/rooms.service';
-import { RoomsController } from './rooms/rooms.controller';
 import { RoomsModule } from './rooms/rooms.module';
-import config from "../ormconfig";
 import {RoomsEntity} from "./rooms/rooms.entity";
-import {UsersController} from "./users/users.controller";
-import {UsersService} from "./users/users.service";
-import {AuthController} from "./auth/auth.controller";
-import {AuthService} from "./auth/auth.service";
+import {ConfigModule} from "@nestjs/config";
+import config from "../ormconfig";
+import 'dotenv/config'
 
 @Module({
   imports: [
@@ -21,9 +17,13 @@ import {AuthService} from "./auth/auth.service";
       TypeOrmModule.forFeature([
           UsersEntity, RoomsEntity
       ]),
+      ConfigModule.forRoot({
+          isGlobal: true,
+          envFilePath: `.${process.env.NODE_ENV}.env`
+      }),
       RoomsModule
   ],
-  controllers: [], //wtf
-  providers: [], //wtf
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
