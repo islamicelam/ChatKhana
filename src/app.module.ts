@@ -6,8 +6,8 @@ import {UsersEntity} from "./users/users.entity";
 import { RoomsModule } from './rooms/rooms.module';
 import {RoomsEntity} from "./rooms/rooms.entity";
 import {ConfigModule} from "@nestjs/config";
+import { MessagesModule } from './messages/messages.module';
 import config from "../ormconfig";
-import 'dotenv/config'
 
 @Module({
   imports: [
@@ -21,7 +21,8 @@ import 'dotenv/config'
           isGlobal: true,
           envFilePath: `.${process.env.NODE_ENV}.env`
       }),
-      RoomsModule
+      RoomsModule,
+      MessagesModule
   ],
   controllers: [],
   providers: [],

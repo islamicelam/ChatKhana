@@ -12,7 +12,8 @@ import {RoomsEntity} from "../rooms/rooms.entity";
     imports: [
         forwardRef(() => AuthModule),
         TypeOrmModule.forFeature([UsersEntity]),
-        RoomsEntity
+        RoomsEntity,
+        JwtModule
     ],
     controllers: [UsersController],
     providers: [UsersService, AuthService],
