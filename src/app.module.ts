@@ -8,6 +8,7 @@ import {RoomsEntity} from "./rooms/rooms.entity";
 import {ConfigModule} from "@nestjs/config";
 import { MessagesModule } from './messages/messages.module';
 import config from "../ormconfig";
+import {MessagesEntity} from "./messages/entities/message.entity";
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import config from "../ormconfig";
       AuthModule,
       TypeOrmModule.forRoot(config),
       TypeOrmModule.forFeature([
-          UsersEntity, RoomsEntity
+          UsersEntity, RoomsEntity, MessagesEntity
       ]),
       ConfigModule.forRoot({
           isGlobal: true,

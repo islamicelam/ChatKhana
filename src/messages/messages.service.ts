@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
-import {Message} from "./entities/message.entity";
+import {MessagesEntity} from "./entities/message.entity";
+import {InjectRepository} from "@nestjs/typeorm";
+import {Repository} from "typeorm";
 
 @Injectable()
 export class MessagesService {
-  messages: Message[] = [];
+  constructor(@InjectRepository (MessagesEntity)
+              private messagesEntity: Repository<MessagesEntity>
+  ) {}
   clientToUser = {};
 
   identify(name: string, clientId: string) {
@@ -18,23 +22,25 @@ export class MessagesService {
     return this.clientToUser[clientId]
   }
 
-  create(createMessageDto: CreateMessageDto, clientId: string) {
-    const message = {
-      name: createMessageDto.name,
-      text: createMessageDto.text
-    }
-
-    this.messages.push(message)
-
-    return message
+  async create(createMessageDto: CreateMessageDto) {
+    const messageEntity = this.messagesEntity.create(createMessageDto)
+    const message = await this.messagesEntity.save(messageEntity)
+    console.log(messageEntity)
+    console.log(message)
+    return message;
   }
 
   findAll() {
-    return this.messages
+    return this.messagesEntity.find();
   }
 
-  update(id: number, updateMessageDto: UpdateMessageDto) {
-    return `This action updates a #${id} message`;
+  async update(id: number, updateMessageDto: UpdateMessageDto) {
+    const message = await this.messagesEntity.findOneBy({id})
+    if (!message) {
+      throw new Error(`Message with id ${id} not found`)
+    }
+    message.text = updateMessageDto.text;
+    return await this.messagesEntity.save(message)
   }
 
   remove(id: number) {

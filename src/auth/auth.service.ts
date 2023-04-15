@@ -13,19 +13,19 @@ export class AuthService {
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
     ) {}
-    async validateUser (userDto: LoginDto) {
+    async validateUser(userDto: LoginDto): Promise<any> {
         const user = await this.usersService.findByUsername(userDto.username);
-        const hashPassword = await bcrypt.hash(userDto.password, 5);
-        const passwordEquals = await bcrypt.compare(userDto.password, hashPassword);
+        const passwordEquals = await bcrypt.compare(userDto.password, user.password);
         if (user && passwordEquals) {
             return user;
+        } else {
+            throw new UnauthorizedException({ message: 'Wrong username or password' });
         }
-        throw new UnauthorizedException({message: "Wrong username or password"})
     }
 
     async login (userDto: LoginDto) {
-        console.log(userDto)
         const user = await this.validateUser(userDto);
+        console.log(user)
         return this.generateToken(user)
     }
 

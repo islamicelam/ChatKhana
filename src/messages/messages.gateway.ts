@@ -20,13 +20,11 @@ export class MessagesGateway {
       @MessageBody() createMessageDto: CreateMessageDto,
       @ConnectedSocket() client: Socket
   ) {
-    const message = this.messagesService.create(createMessageDto, client.id);
+    const message = await this.messagesService.create(createMessageDto); //client.id
 
     this.server.emit('message', message)
-    console.log(message)
-    console.log(client.id)
-
-    return message;
+    // console.log(message)
+    // console.log(client.id)
   }
 
   @SubscribeMessage('findAllMessages')
