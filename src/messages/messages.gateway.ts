@@ -20,7 +20,7 @@ export class MessagesGateway {
       @MessageBody() createMessageDto: CreateMessageDto,
       @ConnectedSocket() client: Socket
   ) {
-    const message = await this.messagesService.create(createMessageDto); //client.id
+    const message = await this.messagesService.create(createMessageDto);
 
     this.server.emit('message', message)
     // console.log(message)
@@ -33,13 +33,17 @@ export class MessagesGateway {
   }
 
   @SubscribeMessage('updateMessage')
-  update(@MessageBody() updateMessageDto: UpdateMessageDto) {
-    return this.messagesService.update(updateMessageDto.id, updateMessageDto);
+  async update(
+      @MessageBody() updateMessageDto: UpdateMessageDto,
+      @ConnectedSocket() client: Socket
+  ) {
+    const message = await this.messagesService.update(updateMessageDto.id, updateMessageDto);
+    this.server.emit("updateMessage", message)
   }
 
   @SubscribeMessage('removeMessage')
-  remove(@MessageBody() id: number) {
-    return this.messagesService.remove(id);
+  async remove(@MessageBody('id') id: number) {
+    await this.messagesService.remove(id);
   }
 
   @SubscribeMessage('join')

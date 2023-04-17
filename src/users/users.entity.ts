@@ -1,7 +1,7 @@
 import {Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
-import {RoomsEntity} from "../rooms/rooms.entity";
+import {Room} from "../rooms/rooms.entity";
 @Entity({name: "users"})
-export class UsersEntity {
+export class User {
     @PrimaryGeneratedColumn('uuid')
     userId: number;
     @Column({nullable: false})
@@ -10,7 +10,7 @@ export class UsersEntity {
     email: string;
     @Column()
     password: string;
-    @ManyToMany(() => RoomsEntity, room => room.users)
+    @ManyToMany(() => Room, room => room.users)
     @JoinTable()
-    rooms: RoomsEntity[];
+    rooms: Room[];
 }

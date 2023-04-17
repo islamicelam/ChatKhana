@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import {UsersEntity} from "./users.entity";
+import {User} from "./users.entity";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
-import {RoomsEntity} from "../rooms/rooms.entity";
+import {Room} from "../rooms/rooms.entity";
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(UsersEntity)
-                private userRepository: Repository<UsersEntity>) {
+    constructor(@InjectRepository(User)
+                private userRepository: Repository<User>) {
     }
 
 
@@ -16,11 +16,11 @@ export class UsersService {
         const user = this.userRepository.create(dto);
         return this.userRepository.save(user);
     }
-    async findByUsername (username: string): Promise<UsersEntity> {
+    async findByUsername (username: string): Promise<User> {
         return await this.userRepository.findOneBy({ username })
     }
 
-    async getUserRooms (userId: number): Promise<RoomsEntity[]> {
+    async getUserRooms (userId: number): Promise<Room[]> {
         const user = await this.userRepository.findOne({where: {userId}, relations: ['rooms']});
         return user.rooms;
     }

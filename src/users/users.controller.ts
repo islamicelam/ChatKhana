@@ -1,8 +1,7 @@
 import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {UsersService} from "./users.service";
 import {CreateUserDto} from "./dto/create-user.dto";
-import {UsersEntity} from "./users.entity";
-import {RoomsEntity} from "../rooms/rooms.entity";
+import {Room} from "../rooms/rooms.entity";
 
 @Controller('users')
 export class UsersController {
@@ -15,7 +14,7 @@ export class UsersController {
     }
 
     @Get(':userId/rooms')
-    getRooms(@Param('userId') userId: number): Promise<RoomsEntity[]> {
+    getRooms(@Param('userId') userId: number): Promise<Room[]> {
         return this.usersService.getUserRooms(userId)
     }
     //

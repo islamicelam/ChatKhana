@@ -1,6 +1,5 @@
 import * as process from "process";
 import {PostgresConnectionOptions} from "typeorm/driver/postgres/PostgresConnectionOptions";
-import {TypeOrmModuleOptions} from "@nestjs/typeorm";
 import 'dotenv/config'
 
 const config: PostgresConnectionOptions = {
@@ -11,6 +10,9 @@ const config: PostgresConnectionOptions = {
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
     entities: ["dist/**/*.entity{.ts,.js}"],
+    migrations: ['dist/migrations/**/*.js'],
+    migrationsRun: true,
+    migrationsTableName: 'migrations',
     synchronize: true,
 }
 
