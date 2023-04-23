@@ -13,7 +13,9 @@ export class MessagesGateway {
 
   @WebSocketServer()
   server: Server;
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(
+      private readonly messagesService: MessagesService
+              ) {}
 
   @SubscribeMessage('createMessage')
   async create(
@@ -21,8 +23,9 @@ export class MessagesGateway {
       @ConnectedSocket() client: Socket
   ) {
     const message = await this.messagesService.create(createMessageDto);
+    const roomId = createMessageDto.roomId;
 
-    this.server.emit('message', message)
+    this.server.to(roomId).emit('message', message)
     // console.log(message)
     // console.log(client.id)
   }
@@ -42,16 +45,19 @@ export class MessagesGateway {
   }
 
   @SubscribeMessage('removeMessage')
-  async remove(@MessageBody('id') id: number) {
+  async remove(@MessageBody('id') id: string) {
     await this.messagesService.remove(id);
   }
 
-  @SubscribeMessage('join')
-  joinRoom(
-      @MessageBody('name') name: string,
+  @SubscribeMessage('joinRoom')
+  async joinRoom(
+      @MessageBody() roomId: string,
       @ConnectedSocket() client: Socket
   ) {
-    return this.messagesService.identify(name, client.id);
+    client.join(roomId)
+    const message = `${client.id} has joined room ${roomId}`;
+    console.log(message)
+    return message;
   }
 
   @SubscribeMessage('typing')

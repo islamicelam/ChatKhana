@@ -1,16 +1,19 @@
-import {Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
-import {Room} from "../rooms/rooms.entity";
+import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 @Entity({name: "users"})
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    userId: number;
+    userId: string;
     @Column({nullable: false})
     username: string;
     @Column({unique: true})
     email: string;
     @Column()
     password: string;
-    @ManyToMany(() => Room, room => room.users)
-    @JoinTable()
-    rooms: Room[];
+    // @ManyToMany(() => Room, rooms => rooms.users, {nullable: true})
+    // @JoinTable({
+    //     name: "users_rooms",
+    //     joinColumn: { name: "usersUserId", referencedColumnName: "userId"},
+    //     inverseJoinColumn: { name: "roomsRoomId", referencedColumnName: "roomId"}
+    // })
+    // rooms: Room[];
 }

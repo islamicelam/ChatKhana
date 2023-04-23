@@ -7,21 +7,24 @@ import {Room} from "../rooms/rooms.entity";
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User)
-                private userRepository: Repository<User>) {
-    }
+    constructor(
+        @InjectRepository (Room) private roomsEntity: Repository<Room>,
+        @InjectRepository (User) private usersEntity: Repository<User>
+    ) {}
 
 
     async createUser (dto: CreateUserDto) {
-        const user = this.userRepository.create(dto);
-        return this.userRepository.save(user);
+        const user = this.usersEntity.create(dto);
+        return this.usersEntity.save(user);
     }
     async findByUsername (username: string): Promise<User> {
-        return await this.userRepository.findOneBy({ username })
+        return await this.usersEntity.findOneBy({ username })
     }
 
-    async getUserRooms (userId: number): Promise<Room[]> {
-        const user = await this.userRepository.findOne({where: {userId}, relations: ['rooms']});
-        return user.rooms;
-    }
+    // async getUserRooms (userId: string): Promise<Room[]> {
+    //     const user = await this.usersEntity.findOne({where: {userId}, relations: ['rooms']});
+    //     return user.rooms;
+    // }
+
+
 }

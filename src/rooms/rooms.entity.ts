@@ -1,9 +1,9 @@
 import {Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "../users/users.entity";
-@Entity()
+@Entity({name: "rooms"})
 export class Room {
     @PrimaryGeneratedColumn('uuid')
-    roomId: number;
+    roomId: string;
     @Column({nullable: false})
     roomName: string;
     @Column({nullable: true})
@@ -11,10 +11,14 @@ export class Room {
     @ManyToOne(() => User)
     @JoinColumn({name: "owner_id"})
     owner: User;
-    @Column({name: "owner_id"})
-    ownerId: number;
+    @Column("uuid",{name: "owner_id"})
+    ownerId: string;
 
     @ManyToMany(() => User)
-    @JoinTable()
+    @JoinTable({
+        name: "rooms_users",
+        joinColumn: { name: "roomsRoomId", referencedColumnName: "roomId"},
+        inverseJoinColumn: { name: "usersUserId", referencedColumnName: "userId" }
+    })
     users: User[];
 }

@@ -8,5 +8,5 @@ export class CreateRoomDto {
     @IsString({message: "Should be string"})
     @Length(3, 50, {message: "Should be 3-50 symbols"})
     readonly description: string;
-    readonly ownerId: number;
+    readonly ownerId: string;
 }
