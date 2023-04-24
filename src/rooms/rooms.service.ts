@@ -15,6 +15,7 @@ export class RoomsService {
     async createRoom (dto: CreateRoomDto) {
         const room = this.roomsEntity.create(dto);
         await this.roomsEntity.save(room)
+        await this.addUserToRoom(room.roomId, room.ownerId)
         return room;
     }
 
@@ -22,7 +23,14 @@ export class RoomsService {
         return this.roomsEntity.find();
     }
 
-    async addUserToRoom(roomId: string, userId: string){
+    async getUserRooms (userId: string): Promise<Room[]> {
+        return await this.roomsEntity.createQueryBuilder('room')
+            .innerJoin('room.users', 'user')
+            .where('user.userId = :userId', {userId})
+            .getMany();
+    }
+
+    async addUserToRoom(roomId: string, userId: string): Promise<Room>{
         const room = await this.roomsEntity.findOne({
             where: { roomId },
             relations: { users: true }
@@ -33,7 +41,6 @@ export class RoomsService {
         if (!user) {
             throw new Error(`User with ID ${userId} not found`);
         }
-        console.log(room)
         user.userId = userId
         room.users.push(user)
         console.log(room)

@@ -9,11 +9,4 @@ export class User {
     email: string;
     @Column()
     password: string;
-    // @ManyToMany(() => Room, rooms => rooms.users, {nullable: true})
-    // @JoinTable({
-    //     name: "users_rooms",
-    //     joinColumn: { name: "usersUserId", referencedColumnName: "userId"},
-    //     inverseJoinColumn: { name: "roomsRoomId", referencedColumnName: "roomId"}
-    // })
-    // rooms: Room[];
 }

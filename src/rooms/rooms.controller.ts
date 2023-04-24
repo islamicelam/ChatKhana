@@ -11,13 +11,18 @@ export class RoomsController {
 
     @Post()
     // @UseGuards(JwtAuthGuard)
-    createRoom (@Body() createRoomDto: CreateRoomDto) {
-        return this.roomsService.createRoom(createRoomDto);
+    async createRoom (@Body() createRoomDto: CreateRoomDto) {
+        return await this.roomsService.createRoom(createRoomDto);
     }
 
     @Get()
-    findAllRooms () {
-        return this.roomsService.getAllRooms();
+    async findUserRooms (@Body() @Body() {userId}: {userId: string}) {
+        return await this.roomsService.getUserRooms(userId)
+    }
+
+    @Get('find')
+    async findAllRooms () {
+        return await this.roomsService.getAllRooms();
     }
 
     @Post(':roomId/join')
